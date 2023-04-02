@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>44dd6f67-bec5-41b3-920b-5dd2951b4d74</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\majumi.CarService.MechanicsAppService.Model\majumi.CarService.MechanicsAppService.Model.csproj" />
+    <ProjectReference Include="..\majumi.CarService.MechanicsAppService.Rest.Model\majumi.CarService.MechanicsAppService.Rest.Model.csproj" />
+  </ItemGroup>
+
+</Project>
