@@ -1,4 +1,4 @@
-﻿Wnamespace majumi.CarService.MechanicsAppService.Rest.Model;
+﻿namespace majumi.CarService.MechanicsAppService.Rest.Model;
 
 public class MechanicLoginStatus
 {
