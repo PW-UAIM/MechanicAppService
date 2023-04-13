@@ -1,17 +1,16 @@
-﻿Wnamespace majumi.CarService.MechanicsAppService.Rest.Model;
+﻿using majumi.CarService.MechanicsAppService.Model;
+
+namespace majumi.CarService.MechanicsAppService.Rest.Model;
 
 public class MechanicLoginStatus
 {
-    public bool IsLoggedIn { get; set; }
-    public int MechanicID { get; set; }
+    public bool IsSuccesfull { get; set; }
+    public Mechanic Mechanic { get; set; }
 
-    public MechanicLoginStatus(bool isLoggedIn, int mechanicID)
+    public MechanicLoginStatus() { }
+    public MechanicLoginStatus(bool isSuccesfull, Mechanic mechanic)
     {
-        IsLoggedIn = isLoggedIn;
-        MechanicID = mechanicID;
-    }
-
-    public MechanicLoginStatus()
-    {
-    }
+        IsSuccesfull = isSuccesfull;
+        Mechanic = mechanic;
+    }   
 }

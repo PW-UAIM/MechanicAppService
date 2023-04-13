@@ -14,7 +14,7 @@ public class Startup
     {
         services.AddControllers();
 
-        services.AddSwaggerGen(options => { options.SwaggerDoc("v1", new OpenApiInfo { Title = "majumi.CarService.MechanicsDataService", Version = "v1" }); });
+        services.AddSwaggerGen(options => { options.SwaggerDoc("v1", new OpenApiInfo { Title = "majumi.CarService.MechanicsAppService", Version = "v1" }); });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -25,7 +25,7 @@ public class Startup
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "majumi.CarService.MechanicsDataService v1"));
+            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "majumi.CarService.MechanicsAppService v1"));
         }
         /* AT
         app.UseHttpsRedirection( );
