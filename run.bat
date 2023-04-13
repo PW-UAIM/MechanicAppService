@@ -1,2 +1,2 @@
-dotnet run --launch-profile majumi.CarService.DataService --project majumi.CarService.MechanicsAppService.Rest
+dotnet run --launch-profile Production --project majumi.CarService.MechanicsAppService.Rest
 pause
