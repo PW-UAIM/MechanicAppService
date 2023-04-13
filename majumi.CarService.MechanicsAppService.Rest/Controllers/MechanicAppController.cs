@@ -26,11 +26,11 @@ public class MechanicAppController : ControllerBase
         return client.MechanicLogIn(id).Result;
     }
 
-    [HttpPost]
-    [Route("/visit/{id:int}/update")]
-    public bool visitUpdate(int id)
+    [HttpPatch]
+    [Route("/visit/{id:int}/update/{status:string}")]
+    public bool visitStatusUpdate(int id, string status)
     {
-        return client.visitUpdate(id).Result;
+        return client.visitStatusUpdate(id, status).Result;
     }
 
     [HttpGet]
