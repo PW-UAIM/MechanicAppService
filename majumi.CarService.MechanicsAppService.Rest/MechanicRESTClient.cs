@@ -171,7 +171,7 @@ public class MechanicRESTClient
     }
 
     
-    public async Task<bool> visitUpdate(int id)
+    public async Task<bool> visitStatusUpdate(int id, string new_status)
     {
         bool status;
 
@@ -179,7 +179,7 @@ public class MechanicRESTClient
         {
             client.BaseAddress = new Uri(VisitDataServiceURL);
 
-            var result = await client.GetAsync($"visit/{id}/update");
+            var result = await client.GetAsync($"visit/{id}/status/{new_status}");
 
             string resultContent = await result.Content.ReadAsStringAsync();
 
