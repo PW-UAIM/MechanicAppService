@@ -1,5 +1,5 @@
 echo off
-set url=http://localhost:5010
+set url=http://localhost:5011
 
 CALL:curl_test "Poprawne logowanie" GET /mechanic/1/login 
 
