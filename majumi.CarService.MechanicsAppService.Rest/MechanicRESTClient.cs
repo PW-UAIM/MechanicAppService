@@ -1,6 +1,5 @@
 ﻿using majumi.CarService.MechanicsAppService.Model;
 using majumi.CarService.MechanicsAppService.Rest.Model;
-using System.ComponentModel;
 using System.Text.Json;
 
 namespace majumi.CarService.MechanicsAppService.Rest;
@@ -12,6 +11,7 @@ public class MechanicRESTClient
     private const string MechanicDataServiceURL = "http://localhost:5002/";
     private const string VisitDataServiceURL = "http://localhost:5003/";
 
+    private JsonSerializerOptions options = new JsonSerializerOptions();
     public MechanicRESTClient()
     {
 

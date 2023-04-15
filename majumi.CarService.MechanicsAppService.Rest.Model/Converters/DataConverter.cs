@@ -14,7 +14,6 @@ public static class DataConverter
             BirthDate = mechanic.BirthDate,
             HireDate = mechanic.HireDate,
             Specialty = mechanic.Specialty,
-            VacationDays = mechanic.VacationDays,
             Address = mechanic.Address,
             Phone = mechanic.Phone,
             Email = mechanic.Email
@@ -29,20 +28,11 @@ public static class DataConverter
             Make = car.Make,
             Model = car.Model,
             Year = car.Year,
-            Color = car.Color,
             Mileage = car.Mileage,
-            Transmission = car.Transmission,
-            FuelType = car.FuelType,
             EngineSize = car.EngineSize,
-            Horsepower = car.Horsepower,
-            Torque = car.Torque,
-            Drivetrain = car.Drivetrain,
-            SeatingCapacity = car.SeatingCapacity,
-            VehicleType = car.VehicleType,
-            Location = car.Location,
             VIN = car.VIN,
             LicensePlate = car.LicensePlate,
-            Warranty = car.Warranty
+            ClientID = car.ClientID
         };
     }
 
@@ -54,12 +44,9 @@ public static class DataConverter
             ClientID = visit.ClientID,
             ServiceType = visit.ServiceType,
             ServiceDate = visit.ServiceDate,
-            ServiceTime = visit.ServiceTime,
-            ServiceLocation = visit.ServiceLocation,
             ServiceCost = visit.ServiceCost,
             ServiceStatus = visit.ServiceStatus,
             Notes = visit.Notes,
-            Rating = visit.Rating,
             MechanicID = visit.MechanicID,
             CarID = visit.CarID
         };
