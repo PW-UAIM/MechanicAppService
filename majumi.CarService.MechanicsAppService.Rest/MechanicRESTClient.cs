@@ -6,19 +6,16 @@ namespace majumi.CarService.MechanicsAppService.Rest;
 
 public class MechanicRESTClient
 {
-    private const string CarDataServiceURL = "http://localhost:5000/";
-    private const string MechanicDataServiceURL = "http://localhost:5002/";
-    private const string VisitDataServiceURL = "http://localhost:5003/";
+    private const string CarDataServiceURL = "https://localhost:5000/";
+    private const string MechanicDataServiceURL = "https://localhost:5002/";
+    private const string VisitDataServiceURL = "https://localhost:5003/";
 
     private JsonSerializerOptions options = new JsonSerializerOptions
     {
         PropertyNameCaseInsensitive = true,
         WriteIndented = true,
     };
-    public MechanicRESTClient()
-    {
-
-    }
+    public MechanicRESTClient() { }
 
     public async Task<MechanicLoginStatus> MechanicLogIn(int id)
     {

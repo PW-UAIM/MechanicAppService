@@ -27,7 +27,7 @@ public class MechanicAppController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("/visit/{id:int}/update/{status:string}")]
+    [Route("/visit/{id:int}/update/{status}")]
     public bool visitStatusUpdate(int id, string status)
     {
         return client.visitStatusUpdate(id, status).Result;
