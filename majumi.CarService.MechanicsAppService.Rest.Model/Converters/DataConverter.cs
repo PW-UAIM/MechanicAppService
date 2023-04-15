@@ -51,4 +51,40 @@ public static class DataConverter
             CarID = visit.CarID
         };
     }
+
+
+    public static Car ConvertToCar(this CarData car)
+    {
+        return new Car
+        {
+            CarID = car.CarID,
+            Make = car.Make,
+            Model = car.Model,
+            Year = car.Year,
+            Mileage = car.Mileage,
+            EngineSize = car.EngineSize,
+            VIN = car.VIN,
+            LicensePlate = car.LicensePlate,
+            ClientID = car.ClientID
+        };
+    }
+
+
+    public static Visit ConvertToVisit(this VisitData visit)
+    {
+        return new Visit
+        {
+            VisitID = visit.VisitID,
+            ClientID = visit.ClientID,
+            ServiceType = visit.ServiceType,
+            ServiceDate = visit.ServiceDate,
+            ServiceCost = visit.ServiceCost,
+            ServiceStatus = visit.ServiceStatus,
+            Notes = visit.Notes,
+            MechanicID = visit.MechanicID,
+            CarID = visit.CarID
+        };
+    }
+
+
 }

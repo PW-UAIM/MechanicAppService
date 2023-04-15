@@ -7,11 +7,14 @@ namespace majumi.CarService.MechanicsAppService.Rest;
 public class MechanicRESTClient
 {
     private const string CarDataServiceURL = "http://localhost:5000/";
-    private const string ClientsDataServiceURL = "http://localhost:5001/";
     private const string MechanicDataServiceURL = "http://localhost:5002/";
     private const string VisitDataServiceURL = "http://localhost:5003/";
 
-    private JsonSerializerOptions options = new JsonSerializerOptions();
+    private JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        WriteIndented = true,
+    };
     public MechanicRESTClient()
     {
 
@@ -31,7 +34,7 @@ public class MechanicRESTClient
 
             try
             {
-                mechanic = JsonSerializer.Deserialize<Mechanic>(resultContent);
+                mechanic = JsonSerializer.Deserialize<Mechanic>(resultContent, options);
             }
             catch (Exception e)
             {
@@ -44,7 +47,7 @@ public class MechanicRESTClient
     }
     public async Task<Car[]> GetAllCars()
     {
-        Car[] cars;
+        var car = new List<Car>();
 
         using (var client = new HttpClient())
         {
@@ -56,7 +59,11 @@ public class MechanicRESTClient
 
             try
             {
-                cars = JsonSerializer.Deserialize<Car[]>(resultContent);
+                CarData[] carData = JsonSerializer.Deserialize<CarData[]>(resultContent, options);
+                foreach(CarData c in carData)
+                {
+                   car.Add(DataConverter.ConvertToCar(c));
+                }
             }
             catch (Exception e)
             {
@@ -65,31 +72,29 @@ public class MechanicRESTClient
             }
         }
 
-        return cars;
+        return car.ToArray();
     }
     public async Task<Car> GetCar(int id)
     {
         Car car;
 
-        using (var client = new HttpClient())
+        using (var httpClient = new HttpClient())
         {
-            client.BaseAddress = new Uri(CarDataServiceURL);
-
-            var result = await client.GetAsync($"car/{id}");
-
+            httpClient.BaseAddress = new Uri(CarDataServiceURL);
+            var result = await httpClient.GetAsync($"car/{id}");
             string resultContent = await result.Content.ReadAsStringAsync();
-
+            Console.WriteLine(resultContent);
             try
             {
-                car = JsonSerializer.Deserialize<Car>(resultContent);
+                CarData c = JsonSerializer.Deserialize<CarData>(resultContent, options);
+                car = DataConverter.ConvertToCar(c);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return null;
+                return new Car();
             }
         }
-
         return car;
     }
     public async Task<Visit> GetVisit(int id)
@@ -106,12 +111,13 @@ public class MechanicRESTClient
 
             try
             {
-                visit = JsonSerializer.Deserialize<Visit>(resultContent);
+                VisitData v = JsonSerializer.Deserialize<VisitData>(resultContent, options);
+                visit = DataConverter.ConvertToVisit(v);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return null;
+                return new Visit();
             }
         }
 
@@ -120,7 +126,7 @@ public class MechanicRESTClient
 
     public async Task<Visit[]> GetMechanicScheduleAt(int id, int year, int month, int day)
     {
-        Visit[] visits;
+        var visit = new List<Visit>();
 
         using (var client = new HttpClient())
         {
@@ -132,7 +138,11 @@ public class MechanicRESTClient
 
             try
             {
-                visits = JsonSerializer.Deserialize<Visit[]>(resultContent);
+                VisitData[] visitData = JsonSerializer.Deserialize<VisitData[]>(resultContent, options);
+                foreach(VisitData v in visitData)
+                {
+                    visit.Add(DataConverter.ConvertToVisit(v));
+                }
             }
             catch (Exception e)
             {
@@ -141,12 +151,12 @@ public class MechanicRESTClient
             }
         }
 
-        return (Visit[]) visits.Where(visit => (visit.ServiceDate == new DateTime(year, month, day) && visit.MechanicID == id));
+        return (visit.Where(visit => (visit.ServiceDate == new DateTime(year, month, day) && visit.MechanicID == id)).ToArray());
     }
 
     public async Task<Visit[]> GetMechanicSchedule(int mechanicID)
     {
-        Visit[] visits;
+        var visit = new List<Visit>();
 
         using (var client = new HttpClient())
         {
@@ -158,7 +168,11 @@ public class MechanicRESTClient
 
             try
             {
-                visits = JsonSerializer.Deserialize<Visit[]>(resultContent);
+                VisitData[] visitData = JsonSerializer.Deserialize<VisitData[]>(resultContent, options);
+                foreach (VisitData v in visitData)
+                {
+                    visit.Add(DataConverter.ConvertToVisit(v));
+                }
             }
             catch (Exception e)
             {
@@ -167,7 +181,7 @@ public class MechanicRESTClient
             }
         }
 
-        return (Visit[])visits.Where(visit => visit.MechanicID == mechanicID);
+        return (visit.Where(visit => visit.MechanicID == mechanicID).ToArray());
     }
 
     
@@ -185,7 +199,7 @@ public class MechanicRESTClient
 
             try
             {
-                status = JsonSerializer.Deserialize<bool>(resultContent);
+                status = JsonSerializer.Deserialize<bool>(resultContent, options);
             }
             catch (Exception e)
             {
