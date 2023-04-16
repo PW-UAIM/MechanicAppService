@@ -195,7 +195,7 @@ public class MechanicRESTClient
         {
             client.BaseAddress = new Uri(VisitDataServiceURL);
 
-            var result = await client.GetAsync($"visit/{id}/status/{new_status}");
+            var result = await client.PatchAsync($"visit/{id}/update/{new_status}", null);
             if (!result.StatusCode.Equals(System.Net.HttpStatusCode.OK))
                 return false;
             string resultContent = await result.Content.ReadAsStringAsync();
