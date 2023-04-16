@@ -189,7 +189,7 @@ public class MechanicRESTClient
     
     public async Task<bool> visitStatusUpdate(int id, string new_status)
     {
-        bool status;
+        VisitData visitData;
 
         using (var client = new HttpClient())
         {
@@ -202,7 +202,7 @@ public class MechanicRESTClient
 
             try
             {
-                status = JsonSerializer.Deserialize<bool>(resultContent, options);
+                visitData = JsonSerializer.Deserialize<VisitData>(resultContent, options);
             }
             catch (Exception e)
             {
@@ -210,7 +210,10 @@ public class MechanicRESTClient
                 return false;
             }
         }
-        return status;
+        if (visitData == null)
+            return false;
+
+        return visitData.ServiceStatus == new_status;
     }
 }
 
