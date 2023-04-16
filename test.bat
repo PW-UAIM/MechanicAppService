@@ -5,7 +5,7 @@ CALL:curl_test "Poprawne logowanie" GET /mechanic/1/login
 
 CALL:curl_test "Niepoprawne logowanie" GET /mechanic/2000/login
 
-CALL:curl_test "Zakoncz wizyte" POST /visit/1/update^
+CALL:curl_test "Zakoncz wizyte" PATCH /visit/1/update^
 	-d '{^
 		"ServiceStatus": "Naprawiono"^
 	}'^

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using majumi.CarService.MechanicsAppService.Rest.Model;
 using majumi.CarService.MechanicsAppService.Rest.Tests;
 using majumi.CarService.MechanicsAppService.Model;
+using System;
 
 
 namespace majumi.CarService.MechanicsAppService.Rest.Controllers;
@@ -21,60 +22,94 @@ public class MechanicAppController : ControllerBase
 
     [HttpGet]
     [Route("/mechanic/{id:int}/login")]
-    public MechanicLoginStatus MechanicLogIn(int id)
+    public ActionResult<MechanicLoginStatus> MechanicLogIn(int id)
     {
-        return client.MechanicLogIn(id).Result;
+        MechanicLoginStatus mechanicLoginStatus = client.MechanicLogIn(id).Result;
+        if (mechanicLoginStatus.IsSuccesfull == false)
+            return Unauthorized();
+
+        return Ok(mechanicLoginStatus);
     }
 
     [HttpPatch]
     [Route("/visit/{id:int}/update/{status}")]
-    public bool visitStatusUpdate(int id, string status)
+    public ActionResult<bool> visitStatusUpdate(int id, string status)
     {
-        return client.visitStatusUpdate(id, status).Result;
+        return Ok(client.visitStatusUpdate(id, status).Result);
     }
 
     [HttpGet]
     [Route("/visit/mechanic/{id:int}")]
-    public Visit[] GetMechanicSchedule(int id)
+    public ActionResult<List<VisitData>> GetMechanicSchedule(int id)
     {
-        return client.GetMechanicSchedule(id).Result;
+        List<Visit> visits = client.GetMechanicSchedule(id).Result;
+        List<VisitData> visitData = new();
+        foreach(Visit v in visits)
+        {
+            visitData.Add(DataConverter.ConvertToVisitData(v));
+        }
+
+        return Ok(visitData);
     }
 
     [HttpGet]
     [Route("/visit/mechanic/{id:int}/date/{year:int}/{month:int}/{day:int}")]
-    public Visit[] GetMechanicScheduleAt(int id, int year, int month, int day)
+    public ActionResult<List<VisitData>> GetMechanicScheduleAt(int id, int year, int month, int day)
     {
-        return client.GetMechanicScheduleAt(id, year, month, day).Result;
+        List<Visit> visits = client.GetMechanicScheduleAt(id, year, month, day).Result;
+        List<VisitData> visitData = new();
+        foreach (Visit v in visits)
+        {
+            visitData.Add(DataConverter.ConvertToVisitData(v));
+        }
+
+        return Ok(visitData);
     }
     
     [HttpGet]
     [Route("/car/all")]
-    public Car[] GetAllCars()
+    public ActionResult<List<CarData>> GetAllCars()
     {
-        return client.GetAllCars().Result;
+        List<Car> cars = client.GetAllCars().Result;
+        List<CarData> carData = new();
+        foreach (Car c in cars)
+        {
+            carData.Add(DataConverter.ConvertToCarData(c));
+        }
+
+        return Ok(carData);
     }
 
     [HttpGet]
     [Route("/car/{id:int}")]
-    public Car GetCar(int id)
+    public ActionResult<CarData> GetCar(int id)
     {
-        return client.GetCar(id).Result;
+        Car car = client.GetCar(id).Result;
+        if (car == null)
+            return NotFound();
+
+        CarData carData = DataConverter.ConvertToCarData(car);
+
+        return Ok(carData);
     }
 
     [HttpGet]
     [Route("/visit/{id:int}")]
-    public Visit GetVisit(int id)
+    public ActionResult<VisitData> GetVisit(int id)
     {
-        return client.GetVisit(id).Result;
+        Visit visit = client.GetVisit(id).Result;
+        if (visit == null)
+            return NotFound();
+
+        VisitData visitData = DataConverter.ConvertToVisitData(visit);
+
+        return Ok(visitData);
     }
 
-    /*
     [HttpGet]
     [Route("/runTests")]
     public string RunTests(string host, int port)
     {
-        Tests.Tests test = new Tests.Tests();
-        return test.RunTests(host, port);
+        throw new NotImplementedException();
     }
-    */
 };
