@@ -7,6 +7,7 @@ echo "Widzi w panelu wszystkie auta"
 CALL:curl_test GET /car/all
 echo "Moze zobaczyc szczegoly konkretnego auta"
 CALL:curl_test GET /car/1
+CALL:curl_test GET /visit/1
 echo "Moze zmienic status wizyty na naprawione"
 CALL:curl_test PATCH /visit/1/update/W_trakcie
 echo:
@@ -14,7 +15,7 @@ echo:
 echo "A nastepnie sprawdzic czy stasus sie zmienil"
 CALL:curl_test GET /visit/1
 echo "A takze sprawdzic swoj grafik na konkretny dzien"
-CALL:curl_test GET /visit/mechanic/1/date/2023/3/1
+CALL:curl_test GET /visit/mechanic/1/date/2022/3/1
 echo "Albo wszystkie dni, w ktore pracuje"
 CALL:curl_test GET /visit/mechanic/1
 
