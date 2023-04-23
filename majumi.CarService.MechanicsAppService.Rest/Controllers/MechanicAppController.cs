@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using majumi.CarService.MechanicsAppService.Rest.Model;
-using majumi.CarService.MechanicsAppService.Rest.Tests;
 using majumi.CarService.MechanicsAppService.Model;
-using System;
 
 
 namespace majumi.CarService.MechanicsAppService.Rest.Controllers;
@@ -21,70 +19,70 @@ public class MechanicAppController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/mechanic/{id:int}/login")]
-    public ActionResult<MechanicLoginStatus> MechanicLogIn(int id)
+    [Route("/login/{id:int}")]
+    public async Task<ActionResult<MechanicLoginStatus>> MechanicLogIn(int id)
     {
-        MechanicLoginStatus mechanicLoginStatus = client.MechanicLogIn(id).Result;
-        if (mechanicLoginStatus.IsSuccesfull == false)
+        MechanicLoginStatus mechanicLoginStatus = await client.MechanicLogIn(id);
+        if (!mechanicLoginStatus.IsSuccesfull)
             return Unauthorized();
 
         return Ok(mechanicLoginStatus);
     }
 
     [HttpPatch]
-    [Route("/visit/{id:int}/update/{status}")]
-    public ActionResult<bool> visitStatusUpdate(int id, string status)
+    [Route("/updateVisitStatus/{id:int}/{status}")]
+    public ActionResult<bool> UpdateVisitStatus(int id, string status)
     {
-        return Ok(client.visitStatusUpdate(id, status).Result);
+        return Ok(client.UpdateVisitStatus(id, status).Result);
     }
 
     [HttpGet]
-    [Route("/visit/mechanic/{id:int}")]
-    public ActionResult<List<VisitData>> GetMechanicSchedule(int id)
+    [Route("/getAllVisitsByMechanic/{id:int}")]
+    public async Task<ActionResult<List<VisitData>>> GetMechanicSchedule(int id)
     {
-        List<Visit> visits = client.GetMechanicSchedule(id).Result;
+        List<Visit> visits = await client.GetMechanicSchedule(id);
         List<VisitData> visitData = new();
-        foreach(Visit v in visits)
+        foreach(Visit visit in visits)
         {
-            visitData.Add(DataConverter.ConvertToVisitData(v));
+            visitData.Add(DataConverter.ConvertToVisitData(visit));
         }
 
         return Ok(visitData);
     }
 
     [HttpGet]
-    [Route("/visit/mechanic/{id:int}/date/{year:int}/{month:int}/{day:int}")]
-    public ActionResult<List<VisitData>> GetMechanicScheduleAt(int id, int year, int month, int day)
+    [Route("/getAllVisitsByMechanicInDay/{id:int}/{year:int}/{month:int}/{day:int}")]
+    public async Task<ActionResult<List<VisitData>>> GetMechanicScheduleAt(int id, int year, int month, int day)
     {
-        List<Visit> visits = client.GetMechanicScheduleAt(id, year, month, day).Result;
+        List<Visit> visits = await client.GetMechanicScheduleAt(id, year, month, day);
         List<VisitData> visitData = new();
-        foreach (Visit v in visits)
+        foreach (Visit visit in visits)
         {
-            visitData.Add(DataConverter.ConvertToVisitData(v));
+            visitData.Add(DataConverter.ConvertToVisitData(visit));
         }
 
         return Ok(visitData);
     }
     
     [HttpGet]
-    [Route("/car/all")]
-    public ActionResult<List<CarData>> GetAllCars()
+    [Route("/getAllCars")]
+    public async Task<ActionResult<List<CarData>>> GetAllCars()
     {
-        List<Car> cars = client.GetAllCars().Result;
+        List<Car> cars = await client.GetAllCars();
         List<CarData> carData = new();
-        foreach (Car c in cars)
+        foreach (Car car in cars)
         {
-            carData.Add(DataConverter.ConvertToCarData(c));
+            carData.Add(DataConverter.ConvertToCarData(car));
         }
 
         return Ok(carData);
     }
 
     [HttpGet]
-    [Route("/car/{id:int}")]
-    public ActionResult<CarData> GetCar(int id)
+    [Route("/getCar/{id:int}")]
+    public async Task<ActionResult<CarData>> GetCar(int id)
     {
-        Car car = client.GetCar(id).Result;
+        Car car = await client.GetCar(id);
         if (car == null)
             return NotFound();
 
@@ -94,10 +92,10 @@ public class MechanicAppController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/visit/{id:int}")]
-    public ActionResult<VisitData> GetVisit(int id)
+    [Route("/getVisit/{id:int}")]
+    public async Task<ActionResult<VisitData>> GetVisit(int id)
     {
-        Visit visit = client.GetVisit(id).Result;
+        Visit visit = await client.GetVisit(id);
         if (visit == null)
             return NotFound();
 

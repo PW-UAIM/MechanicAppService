@@ -10,7 +10,7 @@ public class MechanicRESTClient
     private const string MechanicDataServiceURL = "https://localhost:5002/";
     private const string VisitDataServiceURL = "https://localhost:5003/";
 
-    private JsonSerializerOptions options = new JsonSerializerOptions
+    private JsonSerializerOptions options = new()
     {
         PropertyNameCaseInsensitive = true,
         WriteIndented = true,
@@ -25,7 +25,7 @@ public class MechanicRESTClient
         {
             client.BaseAddress = new Uri(MechanicDataServiceURL);
 
-            var result = await client.GetAsync($"mechanic/{id}");
+            var result = await client.GetAsync($"getMechanic/{id}");
 
             string resultContent = await result.Content.ReadAsStringAsync();
 
@@ -47,22 +47,22 @@ public class MechanicRESTClient
     }
     public async Task<List<Car>> GetAllCars()
     {
-        var car = new List<Car>();
+        var carResult = new List<Car>();
 
         using (var client = new HttpClient())
         {
             client.BaseAddress = new Uri(CarDataServiceURL);
 
-            var result = await client.GetAsync($"car/all");
+            var result = await client.GetAsync($"getAllCars");
 
             string resultContent = await result.Content.ReadAsStringAsync();
 
             try
             {
                 List<CarData> carData = JsonSerializer.Deserialize<CarData[]>(resultContent, options).ToList();
-                foreach(CarData c in carData)
+                foreach(CarData car in carData)
                 {
-                   car.Add(DataConverter.ConvertToCar(c));
+                    carResult.Add(DataConverter.ConvertToCar(car));
                 }
             }
             catch (Exception e)
@@ -72,23 +72,23 @@ public class MechanicRESTClient
             }
         }
 
-        return car;
+        return carResult;
     }
     public async Task<Car?> GetCar(int id)
     {
-        Car car;
+        Car carResult;
 
         using (var httpClient = new HttpClient())
         {
             httpClient.BaseAddress = new Uri(CarDataServiceURL);
-            var result = await httpClient.GetAsync($"car/{id}");
+            var result = await httpClient.GetAsync($"getCar/{id}");
             string resultContent = await result.Content.ReadAsStringAsync();
             if (!result.StatusCode.Equals(System.Net.HttpStatusCode.OK))
                 return null;
             try
             {
                 CarData carData = JsonSerializer.Deserialize<CarData>(resultContent, options);
-                car = DataConverter.ConvertToCar(carData);
+                carResult = DataConverter.ConvertToCar(carData);
             }
             catch (Exception e)
             {
@@ -96,17 +96,17 @@ public class MechanicRESTClient
                 return new Car();
             }
         }
-        return car;
+        return carResult;
     }
     public async Task<Visit> GetVisit(int id)
     {
-        Visit visit;
+        Visit visitResult;
 
         using (var client = new HttpClient())
         {
             client.BaseAddress = new Uri(VisitDataServiceURL);
 
-            var result = await client.GetAsync($"visit/{id}");
+            var result = await client.GetAsync($"getVisit/{id}");
             if (!result.StatusCode.Equals(System.Net.HttpStatusCode.OK))
                 return null;
             string resultContent = await result.Content.ReadAsStringAsync();
@@ -114,7 +114,7 @@ public class MechanicRESTClient
             try
             {
                 VisitData visitData = JsonSerializer.Deserialize<VisitData>(resultContent, options);
-                visit = DataConverter.ConvertToVisit(visitData);
+                visitResult = DataConverter.ConvertToVisit(visitData);
             }
             catch (Exception e)
             {
@@ -123,27 +123,27 @@ public class MechanicRESTClient
             }
         }
 
-        return visit;
+        return visitResult;
     }
 
     public async Task<List<Visit>> GetMechanicScheduleAt(int id, int year, int month, int day)
     {
-        var visit = new List<Visit>();
+        var visitResult = new List<Visit>();
 
         using (var client = new HttpClient())
         {
             client.BaseAddress = new Uri(VisitDataServiceURL);
 
-            var result = await client.GetAsync($"visit/all");
+            var result = await client.GetAsync($"getAllVisits");
 
             string resultContent = await result.Content.ReadAsStringAsync();
 
             try
             {
                 List<VisitData> visitData = JsonSerializer.Deserialize<VisitData[]>(resultContent, options).ToList();
-                foreach(VisitData v in visitData)
+                foreach(VisitData visit in visitData)
                 {
-                    visit.Add(DataConverter.ConvertToVisit(v));
+                    visitResult.Add(DataConverter.ConvertToVisit(visit));
                 }
             }
             catch (Exception e)
@@ -153,27 +153,27 @@ public class MechanicRESTClient
             }
         }
 
-        return visit.Where(visit => (visit.ServiceDate == new DateTime(year, month, day) && visit.MechanicID == id)).ToList();
+        return visitResult.Where(visit => (visit.ServiceDate == new DateTime(year, month, day) && visit.MechanicID == id)).ToList();
     }
 
     public async Task<List<Visit>> GetMechanicSchedule(int mechanicID)
     {
-        var visit = new List<Visit>();
+        var visitResult = new List<Visit>();
 
         using (var client = new HttpClient())
         {
             client.BaseAddress = new Uri(VisitDataServiceURL);
 
-            var result = await client.GetAsync($"visit/all");
+            var result = await client.GetAsync($"getAllVisits");
 
             string resultContent = await result.Content.ReadAsStringAsync();
 
             try
             {
                 List<VisitData> visitData = JsonSerializer.Deserialize<VisitData[]>(resultContent, options).ToList();
-                foreach (VisitData v in visitData)
+                foreach (VisitData visit in visitData)
                 {
-                    visit.Add(DataConverter.ConvertToVisit(v));
+                    visitResult.Add(DataConverter.ConvertToVisit(visit));
                 }
             }
             catch (Exception e)
@@ -183,11 +183,11 @@ public class MechanicRESTClient
             }
         }
 
-        return visit.Where(visit => visit.MechanicID == mechanicID).ToList();
+        return visitResult.Where(visit => visit.MechanicID == mechanicID).ToList();
     }
 
     
-    public async Task<bool> visitStatusUpdate(int id, string new_status)
+    public async Task<bool> UpdateVisitStatus(int id, string new_status)
     {
         VisitData visitData;
 
@@ -195,7 +195,7 @@ public class MechanicRESTClient
         {
             client.BaseAddress = new Uri(VisitDataServiceURL);
 
-            var result = await client.PatchAsync($"visit/{id}/update/{new_status}", null);
+            var result = await client.PatchAsync($"updateVisitStatus/{id}/{new_status}", null);
             if (!result.StatusCode.Equals(System.Net.HttpStatusCode.OK))
                 return false;
             string resultContent = await result.Content.ReadAsStringAsync();
@@ -216,7 +216,3 @@ public class MechanicRESTClient
         return visitData.ServiceStatus == new_status;
     }
 }
-
-
-
-
