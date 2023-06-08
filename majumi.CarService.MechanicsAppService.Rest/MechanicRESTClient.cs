@@ -18,7 +18,13 @@ public class MechanicRESTClient
 
     public MechanicRESTClient()
     {
-        if (System.Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+        if(!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("CARSDATASERVICE_SERVICE_HOST"))) 
+        {
+            CarDataServiceURL = $"http://{Environment.GetEnvironmentVariable("CARSDATASERVICE_SERVICE_HOST")}:{int.Parse(Environment.GetEnvironmentVariable("CARSDATASERVICE_SERVICE_PORT"))}/";
+            MechanicDataServiceURL = $"http://{Environment.GetEnvironmentVariable("MECHANICSDATASERVICE_SERVICE_HOST")}:{int.Parse(Environment.GetEnvironmentVariable("MECHANICSDATASERVICE_SERVICE_PORT"))}/";
+            VisitDataServiceURL = $"http://{Environment.GetEnvironmentVariable("VISITSDATASERVICE_SERVICE_HOST")}:{int.Parse(Environment.GetEnvironmentVariable("VISITSDATASERVICE_SERVICE_PORT"))}/";
+        }   
+        else if (System.Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
         {
             CarDataServiceURL = "http://carsdataservice:5000/";
             MechanicDataServiceURL = "https://mechanicsdataservice:5002/";
