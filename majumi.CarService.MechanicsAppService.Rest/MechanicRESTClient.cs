@@ -6,16 +6,25 @@ namespace majumi.CarService.MechanicsAppService.Rest;
 
 public class MechanicRESTClient
 {
-    private const string CarDataServiceURL = "https://localhost:5000/";
-    private const string MechanicDataServiceURL = "https://localhost:5002/";
-    private const string VisitDataServiceURL = "https://localhost:5003/";
+    private string CarDataServiceURL = "https://localhost:5000/";
+    private string MechanicDataServiceURL = "https://localhost:5002/";
+    private string VisitDataServiceURL = "https://localhost:5003/";
 
     private JsonSerializerOptions options = new()
     {
         PropertyNameCaseInsensitive = true,
         WriteIndented = true,
     };
-    public MechanicRESTClient() { }
+
+    public MechanicRESTClient()
+    {
+        if (System.Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+        {
+            CarDataServiceURL = "http://carsdataservice:5000/";
+            MechanicDataServiceURL = "https://mechanicsdataservice:5002/";
+            VisitDataServiceURL = "http://visitsdataservice:5003/";
+        }
+    }
 
     public async Task<MechanicLoginStatus> MechanicLogIn(int id)
     {
@@ -183,19 +192,18 @@ public class MechanicRESTClient
             }
         }
 
-        return visitResult.Where(visit => visit.MechanicID == mechanicID).ToList();
+        return visitResult.Where(visit => visit.MechanicID == mechanicID || visit.MechanicID == -1).ToList();
     }
 
     
-    public async Task<bool> UpdateVisitStatus(int id, string new_status)
+    public async Task<bool> UpdateVisitStatus(int id, int mechanicid, string new_status, int cost)
     {
         VisitData visitData;
-
         using (var client = new HttpClient())
         {
             client.BaseAddress = new Uri(VisitDataServiceURL);
 
-            var result = await client.PatchAsync($"updateVisitStatus/{id}/{new_status}", null);
+            var result = await client.PatchAsync($"updateVisitStatus/{id}/{mechanicid}/{new_status}/{cost}", null);
             if (!result.StatusCode.Equals(System.Net.HttpStatusCode.OK))
                 return false;
             string resultContent = await result.Content.ReadAsStringAsync();

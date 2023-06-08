@@ -9,7 +9,7 @@ echo "Moze zobaczyc szczegoly konkretnego auta"
 CALL:curl_test GET /getCar/1
 CALL:curl_test GET /getVisit/1
 echo "Moze zmienic status wizyty na naprawione"
-CALL:curl_test PATCH /updateVisitStatus/1/W_trakcie
+CALL:curl_test PATCH /updateVisitStatus/1/1/W_trakcie/100
 echo:
 echo:
 echo "A nastepnie sprawdzic czy status sie zmienil"

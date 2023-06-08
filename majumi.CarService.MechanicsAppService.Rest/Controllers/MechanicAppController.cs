@@ -30,10 +30,10 @@ public class MechanicAppController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("/updateVisitStatus/{id:int}/{status}")]
-    public ActionResult<bool> UpdateVisitStatus(int id, string status)
+    [Route("/updateVisitStatus/{id:int}/{mechanicid:int}/{status}/{cost:int}")]
+    public ActionResult<bool> UpdateVisitStatus(int id, int mechanicid, string status, int cost)
     {
-        return Ok(client.UpdateVisitStatus(id, status).Result);
+        return Ok(client.UpdateVisitStatus(id, mechanicid, status, cost).Result);
     }
 
     [HttpGet]

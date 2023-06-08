@@ -1,0 +1,52 @@
+stages:
+    - build
+    - test
+    - docker
+
+build_debug:
+    stage: build
+    before_script:
+      - cd majumi.CarService.MechanicsAppService.Rest
+    script:
+      - dotnet build -c Debug
+    tags:
+      - dotnet
+
+build_release:
+    stage: build
+    before_script:
+      - cd majumi.CarService.MechanicsAppService.Rest
+    script:
+      - dotnet build -c Release
+    tags:
+      - dotnet
+
+unit_test:
+    stage: test
+    needs: [build_release, build_debug]
+    before_script:
+      - cd majumi.CarService.MechanicsAppService.Rest.Tests
+    script:
+      - dotnet test
+    tags:
+      - all, integration
+
+build_image:
+    stage: docker
+    needs: [unit_test]
+    before_script:
+      - cd Docker
+    script:
+      - ./BuildImage.bat
+    tags:
+      - docker
+
+push_image:
+    stage: docker
+    needs: [build_image]
+    before_script:
+      - cd Docker
+    script:
+      - ./PushImage.bat
+    tags:
+      - docker

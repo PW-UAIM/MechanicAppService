@@ -7,7 +7,7 @@ CALL:curl_test "Niepoprawne logowanie" GET /login/2000
 
 CALL:curl_test "Dane wizyty nr 1" GET /getVisit/1
 
-CALL:curl_test "Zakoncz wizyte" PATCH /updateVisitStatus/1/Naprawiono
+CALL:curl_test "Zakoncz wizyte" PATCH /updateVisitStatus/1/1/Naprawiono/100
 
 CALL:curl_test "Dane wizyty nr 1" GET /getVisit/1
 
