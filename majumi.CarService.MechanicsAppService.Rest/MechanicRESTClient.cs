@@ -27,7 +27,7 @@ public class MechanicRESTClient
         else if (System.Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
         {
             CarDataServiceURL = "http://carsdataservice:5000/";
-            MechanicDataServiceURL = "https://mechanicsdataservice:5002/";
+            MechanicDataServiceURL = "http://mechanicsdataservice:5002/";
             VisitDataServiceURL = "http://visitsdataservice:5003/";
         }
     }
